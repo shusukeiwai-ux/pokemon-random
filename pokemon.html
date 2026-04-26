@@ -216,13 +216,19 @@
 
     async function fetchRandomPokemon() {
       const id = Math.floor(Math.random() * TOTAL_POKEMON) + 1;
-      const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${id}`);
-      return res.json();
+      const [pokemon, species] = await Promise.all([
+        fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then(r => r.json()),
+        fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`).then(r => r.json()),
+      ]);
+      const jaName = species.names.find(n => n.language.name === 'ja-Hrkt')?.name
+        || species.names.find(n => n.language.name === 'ja')?.name
+        || pokemon.name;
+      return { ...pokemon, jaName };
     }
 
     function renderPokemon(data) {
       document.getElementById('pokemonId').textContent = `#${String(data.id).padStart(3, '0')}`;
-      document.getElementById('pokemonName').textContent = data.name;
+      document.getElementById('pokemonName').textContent = data.jaName;
 
       const typesEl = document.getElementById('types');
       typesEl.innerHTML = data.types.map(t => {
