@@ -220,7 +220,7 @@
         fetch(`https://pokeapi.co/api/v2/pokemon/${id}`).then(r => r.json()),
         fetch(`https://pokeapi.co/api/v2/pokemon-species/${id}`).then(r => r.json()),
       ]);
-      const jaName = species.names.find(n => n.language.name === 'ja-Hrkt')?.name
+      const jaName = species.names.find(n => n.language.name === 'ja-hrkt')?.name
         || species.names.find(n => n.language.name === 'ja')?.name
         || pokemon.name;
       return { ...pokemon, jaName };
